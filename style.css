@@ -1,0 +1,517 @@
+:root {
+    /* Kolory */
+    --color-ink: #0F1B2D;         /* głęboki granat — tekst, tło hero */
+    --color-ink-light: #1C2E4A;   /* jaśniejszy granat — gradient hero */
+    --color-accent: #FF8A3D;      /* bursztynowy — CTA, akcenty, "status dot" */
+    --color-accent-dark: #E96F1F; /* hover dla akcentu */
+    --color-teal: #1F9E96;        /* drugi akcent — ikony, drobne detale */
+    --color-bg: #F5F6F7;          /* tło sekcji */
+    --color-white: #FFFFFF;
+    --color-text-muted: #52606D;
+
+    /* Typografia */
+    --font-display: 'Space Grotesk', 'Arial', sans-serif;
+    --font-body: 'Inter', 'Arial', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-body);
+    color: var(--color-ink);
+    background: var(--color-bg);
+}
+
+h1, h2, h3, .logo {
+    font-family: var(--font-display);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 40px);
+}
+
+/* Sygnaturowy element: pulsujący "status dot" przy nagłówkach sekcji,
+   nawiązujący do diagnostyki/naprawy ("urządzenie online"). */
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: clamp(28px, 5vw, 36px);
+    margin-bottom: 20px;
+    color: var(--color-ink);
+}
+
+.section-heading--center {
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.section-heading::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--color-accent);
+    animation: pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 138, 61, 0.5); }
+    50% { box-shadow: 0 0 0 6px rgba(255, 138, 61, 0); }
+}
+
+/* Scroll-reveal: elementy wjeżdżają delikatnie przy scrollu.
+   IntersectionObserver w script.js dodaje klasę .is-visible. */
+.reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+    .section-heading::before {
+        animation: none;
+    }
+}
+
+/** HEADER - Główna belka / nav bar */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 clamp(20px, 4vw, 40px);
+    background: var(--color-white);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Logo */
+.logo {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--color-ink);
+}
+
+/* Menu Desktop */
+.nav a{
+    margin-left: 25px;
+    text-decoration: none;
+    color: var(--color-ink);
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav a:hover {
+    color: var(--color-accent);
+}
+
+/* Hamburger — <button>, resetujemy domyślne style przeglądarki */
+.hamburger {
+    display: none;
+    font-size: 32px;
+    line-height: 1;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 8px;
+    color: var(--color-ink);
+}
+
+/* Menu Mobile */
+.mobile-nav {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+    height: 0;              
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+.mobile-nav a {
+    padding: 12px 0;
+    text-decoration: none;
+    color: var(--color-ink);
+    font-size: 18px;
+}
+
+.mobile-nav a:hover {
+    color: var(--color-accent);
+}
+
+.mobile-nav.open {
+    height: 150px;
+}
+
+/* HERO — duża sekcja powitalna  */
+.hero {
+    background: linear-gradient(135deg, var(--color-ink), var(--color-ink-light));
+    color: var(--color-white);
+    padding: 80px clamp(20px, 5vw, 60px);
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: clamp(32px, 6vw, 48px);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: clamp(16px, 3vw, 20px);
+    margin-bottom: 30px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.85);
+}
+
+.cta {
+    display: inline-block;
+    background: var(--color-accent);
+    color: var(--color-white);
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.cta:hover {
+    background: var(--color-accent-dark);
+    transform: translateY(-2px);
+}
+
+/* O NAS — sekcja dwukolumnowa   */
+.about {
+    padding: 80px clamp(20px, 5vw, 60px);
+    background: var(--color-white);
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.about-image img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.about-text p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: var(--color-text-muted);
+}
+
+/* Usługi */
+
+.services {
+    padding: 40px clamp(20px, 5vw, 60px) 80px;
+    background: var(--color-bg);
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+.services-box {
+    background: var(--color-white);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(15, 27, 45, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.services-box img {
+    width: 60px;
+    margin-bottom: 20px;
+}
+
+.services-box h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--color-ink);
+}
+
+.services-box p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+}
+
+.services-box:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(15, 27, 45, 0.12);
+}
+
+/*
+    Opinie 
+*/
+
+.reviews {
+    padding: 80px clamp(20px, 5vw, 60px);
+    background: var(--color-white);
+}
+
+.reviews-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.reviews-box {
+    background: var(--color-bg);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(15, 27, 45, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reviews-box img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.reviews-box h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--color-ink);
+}
+
+.stars {
+    font-size: 20px;
+    color: #FFD700;
+    margin-bottom: 15px;
+}
+
+.reviews-box p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+}
+
+.reviews-box:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(15, 27, 45, 0.12);
+}
+
+/* Kontakt */
+
+.contact {
+    padding: 80px clamp(20px, 5vw, 60px);
+    background: var(--color-bg);
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.contact-info h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--color-ink);
+}
+
+.contact-info p {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: var(--color-text-muted);
+}
+
+.contact-info a {
+    color: var(--color-teal);
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
+}
+
+.contact-map iframe {
+    width: 100%;
+    height: 300px;
+    min-height: 250px;
+    border: 0;
+    border-radius: 10px;
+    display: block;
+}
+
+/* Footer */
+
+.footer {
+    background: linear-gradient(135deg, var(--color-ink), var(--color-ink-light));
+    color: var(--color-white);
+    padding: 80px clamp(20px, 5vw, 60px);
+    margin-top: 60px;
+}
+
+.footer-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;      
+    text-align: center;       
+    gap: 40px;
+}
+
+
+.footer-row {
+    max-width: 600px;         
+    width: 100%;
+}
+
+
+.footer-info h3 {
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.footer-info p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+
+.footer-contact p {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.footer-contact a {
+    color: var(--color-white);
+    text-decoration: none;
+}
+
+.footer-contact a:hover {
+    text-decoration: underline;
+}
+
+
+.footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.footer-social img {
+    width: 40px;
+    height: 40px;
+}
+
+
+.footer-copy {
+    font-size: 14px;
+    color: #ccc;
+}
+
+/* RESPONSYWNOŚĆ */
+/* 
+Breakpoints użyte w sekcji Usługi:
+- max-width: 900px → układ dla tabletów poziomo (3 kolumny → 2 kolumny)
+- max-width: 768px → ogólny breakpoint dla tabletów (używany wcześniej w innych sekcjach)
+- max-width: 600px → układ dla telefonów (2 kolumny → 1 kolumna)
+*/
+
+@media (max-width: 900px) {
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+
+    .reviews-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .section-heading {
+        justify-content: center;
+    }
+
+    .contact-map iframe {
+        height: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    
+    .nav {
+        display: none;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .about-image {
+        order: -1;
+    }
+
+    .about .section-heading {
+        justify-content: center;
+    }
+}
+
+
+
+@media (max-width: 600px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reviews-grid {
+        grid-template-columns: 1fr;
+    }
+}
